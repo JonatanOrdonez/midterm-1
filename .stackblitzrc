@@ -1,5 +1,4 @@
 {
   "installDependencies": true,
-  "startCommand": "npm run dev",
-  "defaultPort": 3000
+  "startCommand": "npm run dev"
 }
