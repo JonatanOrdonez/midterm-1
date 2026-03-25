@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(cors());
 
 app.get('/', (_req, res) => {
-  res.redirect('http://localhost:3000');
+  res.redirect('http://localhost:3001');
 });
 
 // Routes
