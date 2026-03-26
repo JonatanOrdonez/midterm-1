@@ -53,7 +53,9 @@ export const getStoreWithProductsByIdService = async (
   return { ...store, products };
 };
 
-export const getStoreByUserIdService = async (userId: string): Promise<Store> => {
+export const getStoreByUserIdService = async (
+  userId: string
+): Promise<Store> => {
   const result = await db.query<Store>(
     'SELECT id, name, "isOpen", "userId" FROM stores WHERE "userId" = $1',
     [userId]
