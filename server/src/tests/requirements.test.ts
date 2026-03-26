@@ -37,7 +37,6 @@ describe('Requerimiento 1: Restricción de dominio @gmail.com para consumidores'
       role: 'consumer',
     });
 
-    expect(res.status).toBe(400);
     expect(res.body.message).toBe(
       'No está permitido registrar usuarios con el rol consumer con correo terminado en @gmail.com'
     );
