@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { UserProvider, useUser } from './providers/UserProvider';
 import { AxiosProvider } from './providers/AxiosProvider';
 import { ToastProvider } from './providers/ToastProvider';
+import { ExamProvider } from './providers/ExamProvider';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { StoresPage } from './pages/StoresPage';
@@ -30,13 +31,15 @@ function AppRoutes() {
 export function App() {
   return (
     <BrowserRouter>
-      <UserProvider>
-        <AxiosProvider>
-          <ToastProvider>
-            <AppRoutes />
-          </ToastProvider>
-        </AxiosProvider>
-      </UserProvider>
+      <ExamProvider>
+        <UserProvider>
+          <AxiosProvider>
+            <ToastProvider>
+              <AppRoutes />
+            </ToastProvider>
+          </AxiosProvider>
+        </UserProvider>
+      </ExamProvider>
     </BrowserRouter>
   );
 }
