@@ -41,10 +41,10 @@ const createUser = async (dto: CreateUserDTO): Promise<User> => {
   return result.rows[0];
 };
 
-const createStoreForUser = async (userId: string, storeName: string) => {
+const createStoreForUser = async (userId: string, store_name: string) => {
   await db.query(
-    'INSERT INTO stores (name, "isOpen", "userId") VALUES ($1, $2, $3)',
-    [storeName, false, userId]
+    'INSERT INTO stores (name, is_open, user_id) VALUES ($1, $2, $3)',
+    [store_name, false, userId]
   );
 };
 
@@ -65,8 +65,8 @@ export const createUserService = async (
 
   const user = await createUser(dto);
 
-  if (dto.role === UserRole.STORE && dto.storeName) {
-    await createStoreForUser(user.id, dto.storeName);
+  if (dto.role === UserRole.STORE && dto.store_name) {
+    await createStoreForUser(user.id, dto.store_name);
   }
 
   const token = generateToken(user);

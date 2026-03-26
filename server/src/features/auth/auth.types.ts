@@ -22,7 +22,7 @@ export interface CreateUserDTO {
   email: string;
   password: string;
   role: UserRole;
-  storeName?: string;
+  store_name?: string;
 }
 
 export interface AuthenticateUserDTO {

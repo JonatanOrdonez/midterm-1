@@ -17,7 +17,7 @@ export const authenticateUserController = async (
 };
 
 export const createUserController = async (req: Request, res: Response) => {
-  const { email, password, role, storeName } = req.body;
+  const { email, password, role, store_name } = req.body;
 
   if (!email) throw Boom.badRequest('Email is required');
   if (!password) throw Boom.badRequest('Password is required');
@@ -26,10 +26,10 @@ export const createUserController = async (req: Request, res: Response) => {
       `Role must be one of: ${Object.values(UserRole).join(', ')}`
     );
   }
-  if (role === UserRole.STORE && !storeName) {
-    throw Boom.badRequest('storeName is required for store role');
+  if (role === UserRole.STORE && !store_name) {
+    throw Boom.badRequest('store_name is required for store role');
   }
 
-  const data = await createUserService({ email, password, role, storeName });
+  const data = await createUserService({ email, password, role, store_name });
   return res.status(201).json(data);
 };

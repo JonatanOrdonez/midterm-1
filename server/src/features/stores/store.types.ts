@@ -1,15 +1,15 @@
 export interface Store {
   id: string;
   name: string;
-  isOpen: boolean;
-  userId: string;
+  is_open: boolean;
+  user_id: string;
 }
 
 export interface Product {
   id: string;
   name: string;
   price: number;
-  storeId: string;
+  store_id: string;
 }
 
 export interface StoreWithProducts extends Store {
@@ -19,6 +19,6 @@ export interface StoreWithProducts extends Store {
 export interface CreateProductDTO {
   name: string;
   price: number;
-  storeId: string;
-  userId: string;
+  store_id: string;
+  user_id: string;
 }

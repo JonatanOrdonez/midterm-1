@@ -46,8 +46,8 @@ export function StoresPage() {
                 class="bg-white rounded-2xl shadow p-5 flex justify-between items-center cursor-pointer hover:shadow-md transition-shadow"
               >
                 <h2 class="text-lg font-medium text-gray-800">{store.name}</h2>
-                <span class={`text-xs px-2 py-1 rounded-full font-medium ${store.isOpen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-500'}`}>
-                  {store.isOpen ? 'Abierta' : 'Cerrada'}
+                <span class={`text-xs px-2 py-1 rounded-full font-medium ${store.is_open ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-500'}`}>
+                  {store.is_open ? 'Abierta' : 'Cerrada'}
                 </span>
               </div>
             ))}

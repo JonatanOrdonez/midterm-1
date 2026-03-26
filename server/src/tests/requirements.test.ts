@@ -6,11 +6,6 @@ import { initDb } from '../config/initDb';
 
 // Reset the database before each test for isolation
 beforeEach(async () => {
-  await db.exec(`
-    DROP TABLE IF EXISTS products CASCADE;
-    DROP TABLE IF EXISTS stores CASCADE;
-    DROP TABLE IF EXISTS users CASCADE;
-  `);
   await initDb();
 });
 
@@ -80,7 +75,7 @@ describe('Requerimiento 3: Consumidores solo ven tiendas abiertas', () => {
     await request(app)
       .patch(`/api/stores/${storeId}`)
       .set('Authorization', `Bearer ${storeToken}`)
-      .send({ isOpen: false });
+      .send({ is_open: false });
 
     // El consumer no debería ver ninguna tienda
     const consumerToken = await login('customer@email.com', '123456');

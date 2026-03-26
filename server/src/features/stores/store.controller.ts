@@ -29,14 +29,14 @@ export const getMyStoreController = async (req: Request, res: Response) => {
 
 export const updateStoreController = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { isOpen } = req.body;
+  const { is_open } = req.body;
   const { id: userId } = getUserFromRequest(req);
 
-  if (typeof isOpen !== 'boolean') {
-    throw Boom.badRequest('isOpen must be a boolean');
+  if (typeof is_open !== 'boolean') {
+    throw Boom.badRequest('is_open must be a boolean');
   }
 
-  const store = await updateStoreIsOpenService(String(id), isOpen, userId);
+  const store = await updateStoreIsOpenService(String(id), is_open, userId);
   return res.json(store);
 };
 
@@ -63,8 +63,8 @@ export const createProductController = async (req: Request, res: Response) => {
   const product = await createProductService({
     name,
     price,
-    storeId: String(storeId),
-    userId,
+    store_id: String(storeId),
+    user_id: userId,
   });
   return res.json(product);
 };

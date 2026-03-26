@@ -9,7 +9,16 @@ app.use(express.json());
 app.use(cors());
 
 app.get('/', (_req, res) => {
-  res.redirect('http://localhost:3001');
+  res.json([
+    { method: 'POST', endpoint: '/api/auth/register' },
+    { method: 'POST', endpoint: '/api/auth/login' },
+    { method: 'GET',  endpoint: '/api/stores' },
+    { method: 'GET',  endpoint: '/api/stores/mine' },
+    { method: 'GET',  endpoint: '/api/stores/:id' },
+    { method: 'PATCH', endpoint: '/api/stores/:id' },
+    { method: 'POST', endpoint: '/api/stores/:id/products' },
+    { method: 'DELETE', endpoint: '/api/stores/:id/products/:productId' },
+  ]);
 });
 
 // Routes

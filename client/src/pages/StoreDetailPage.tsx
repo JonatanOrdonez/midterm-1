@@ -18,7 +18,7 @@ export function StoreDetailPage() {
   const [productPrice, setProductPrice] = useState('');
   const [addingProduct, setAddingProduct] = useState(false);
 
-  const isOwner = !!store && auth?.user.id === store.userId;
+  const isOwner = !!store && auth?.user.id === store.user_id;
 
   useEffect(() => {
     axios.get<StoreWithProducts>(`/api/stores/${id}`)
@@ -31,10 +31,10 @@ export function StoreDetailPage() {
     if (!store) return;
     try {
       const { data } = await axios.patch<StoreWithProducts>(`/api/stores/${store.id}`, {
-        isOpen: !store.isOpen,
+        is_open: !store.is_open,
       });
       setStore({ ...data, products: store.products });
-      showToast(data.isOpen ? 'Tienda abierta' : 'Tienda cerrada', 'success');
+      showToast(data.is_open ? 'Tienda abierta' : 'Tienda cerrada', 'success');
     } catch (err) {
       showToast(err instanceof Error ? err.message : 'Error al actualizar la tienda', 'error');
     }
@@ -89,17 +89,17 @@ export function StoreDetailPage() {
             ← Volver
           </button>
           <h1 class="text-xl font-semibold text-gray-800">{store.name}</h1>
-          <span class={`text-xs px-2 py-1 rounded-full font-medium ${store.isOpen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-500'}`}>
-            {store.isOpen ? 'Abierta' : 'Cerrada'}
+          <span class={`text-xs px-2 py-1 rounded-full font-medium ${store.is_open ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-500'}`}>
+            {store.is_open ? 'Abierta' : 'Cerrada'}
           </span>
         </div>
         <div class="flex items-center gap-3">
           {isOwner && (
             <button
               onClick={toggleOpen}
-              class={`text-sm px-3 py-1 rounded-lg font-medium transition-colors ${store.isOpen ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-green-100 text-green-700 hover:bg-green-200'}`}
+              class={`text-sm px-3 py-1 rounded-lg font-medium transition-colors ${store.is_open ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-green-100 text-green-700 hover:bg-green-200'}`}
             >
-              {store.isOpen ? 'Cerrar tienda' : 'Abrir tienda'}
+              {store.is_open ? 'Cerrar tienda' : 'Abrir tienda'}
             </button>
           )}
           <button onClick={() => setAuth(null)} class="text-sm text-red-500 hover:underline">

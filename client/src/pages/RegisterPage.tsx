@@ -14,7 +14,7 @@ export function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState<UserRole>('consumer');
-  const [storeName, setStoreName] = useState('');
+  const [store_name, setStoreName] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: Event) => {
@@ -25,7 +25,7 @@ export function RegisterPage() {
         email,
         password,
         role,
-        ...(role === 'store' && { storeName }),
+        ...(role === 'store' && { store_name }),
       });
       setAuth(data);
       navigate(data.user.role === 'store' ? '/my-store' : '/stores');
@@ -71,7 +71,7 @@ export function RegisterPage() {
             <input
               type="text"
               placeholder="Nombre de tu tienda"
-              value={storeName}
+              value={store_name}
               onInput={(e) => setStoreName((e.target as HTMLInputElement).value)}
               class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
               required
