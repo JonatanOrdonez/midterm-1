@@ -27,62 +27,72 @@ async function getMyStoreId(token: string): Promise<string> {
 }
 
 // ─────────────────────────────────────────────────────────────
-// Requerimiento 1 — Restricción de dominio @gmail.com
+// Requerimiento 1 — Restricción de dominio @hotmail.es para stores
 // ─────────────────────────────────────────────────────────────
-describe('Requerimiento 1: Restricción de dominio @gmail.com para consumidores', () => {
-  it('debe rechazar el registro de un consumer con correo @gmail.com', async () => {
+describe('Requerimiento 1: Restricción de dominio @hotmail.es para stores', () => {
+  it('debe rechazar el registro de un store con correo @hotmail.es', async () => {
     const res = await request(app).post('/api/auth/register').send({
-      email: 'usuario@gmail.com',
+      email: 'usuario@hotmail.es',
       password: 'password123',
-      role: 'consumer',
+      role: 'store',
+      store_name: 'Mi Tienda',
     });
 
     expect(res.body.message).toBe(
-      'No está permitido registrar usuarios con el rol consumer con correo terminado en @gmail.com'
+      'No está permitido registrar usuarios con el rol store con correo terminado en @hotmail.es'
     );
   });
 });
 
 // ─────────────────────────────────────────────────────────────
-// Requerimiento 2 — Precio mínimo de producto >= 10.000
+// Requerimiento 2 — Nombre del producto mínimo 5 caracteres
 // ─────────────────────────────────────────────────────────────
-describe('Requerimiento 2: Precio mínimo del producto debe ser >= 10.000', () => {
-  it('debe rechazar un producto con precio menor a 10.000', async () => {
+describe('Requerimiento 2: Nombre del producto debe tener mínimo 5 caracteres', () => {
+  it('debe rechazar un producto con nombre menor a 5 caracteres', async () => {
     const token = await login('store@email.com', '123456');
     const storeId = await getMyStoreId(token);
 
     const res = await request(app)
       .post(`/api/stores/${storeId}/products`)
       .set('Authorization', `Bearer ${token}`)
-      .send({ name: 'Producto barato', price: 5000 });
+      .send({ name: 'Pan', price: 15000 });
 
     expect(res.body.message).toBe(
-      'El precio del producto debe ser mayor o igual a 10.000'
+      'El nombre del producto debe tener al menos 5 caracteres'
     );
   });
 });
 
 // ─────────────────────────────────────────────────────────────
-// Requerimiento 3 — Solo tiendas abiertas para consumers
+// Requerimiento 3 — Solo productos con precio mayor a 5000
 // ─────────────────────────────────────────────────────────────
-describe('Requerimiento 3: Consumidores solo ven tiendas abiertas', () => {
-  it('No debe retornar tiendas cerradas al consumidor', async () => {
-    const storeToken = await login('store@email.com', '123456');
-    const storeId = await getMyStoreId(storeToken);
+describe('Requerimiento 3: Solo se muestran productos con precio mayor a 5000', () => {
+  it('no debe retornar productos con precio menor o igual a 5000', async () => {
+    const token = await login('store@email.com', '123456');
+    const storeId = await getMyStoreId(token);
 
-    // Cerrar la tienda explícitamente
+    // Crear un producto con precio <= 5000
     await request(app)
-      .patch(`/api/stores/${storeId}`)
-      .set('Authorization', `Bearer ${storeToken}`)
-      .send({ is_open: false });
+      .post(`/api/stores/${storeId}/products`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: 'Producto barato', price: 3000 });
 
-    // El consumer no debería ver ninguna tienda
-    const consumerToken = await login('customer@email.com', '123456');
+    // Crear un producto con precio > 5000
+    await request(app)
+      .post(`/api/stores/${storeId}/products`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: 'Producto caro', price: 15000 });
+
+    // Al consultar la tienda, solo deben aparecer productos con precio > 5000
     const res = await request(app)
-      .get('/api/stores')
-      .set('Authorization', `Bearer ${consumerToken}`);
+      .get(`/api/stores/${storeId}`)
+      .set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
-    expect(res.body.length).toBe(0);
+    const products = res.body.products;
+    expect(products.length).toBeGreaterThan(0);
+    products.forEach((product: { price: number }) => {
+      expect(Number(product.price)).toBeGreaterThan(5000);
+    });
   });
 });
